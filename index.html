@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星導 - 四柱推命占い</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F7F1E6;
+    --bg-soft: #EFE6D2;
+    --paper: #FBF7EE;
+    --ink: #2E2A24;
+    --ink-soft: #6B6459;
+    --ink-faint: #948C7C;
+    --indigo: #23324F;
+    --indigo-deep: #141D2E;
+    --indigo-tint: #E7E9E4;
+    --gold: #B68D40;
+    --gold-soft: #D8BD86;
+    --gold-line: rgba(182,141,64,0.35);
+    --plum: #8C5B6E;
+    --wood: #5C7A5E;
+    --fire: #B5533C;
+    --earth: #B68D40;
+    --metal: #857D6E;
+    --water: #3E5C76;
+    --shadow: 0 18px 40px rgba(35,50,79,0.10);
+    --shadow-soft: 0 8px 22px rgba(46,42,36,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:84px;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    font-weight:400;
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  html{ overflow-x:hidden; }
+  h1,h2,h3,.mincho{
+    font-family:'Shippori Mincho', serif;
+  }
+  a{color:inherit;}
+  img,svg{display:block;}
+
+  /* ---------- layout helpers ---------- */
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+  section{padding:96px 0;}
+  @media (max-width:640px){
+    section{padding:64px 0;}
+    .wrap{padding:0 20px;}
+  }
+
+  /* ---------- nav ---------- */
+  header.site{
+    position:sticky; top:0; z-index:40;
+    background:rgba(247,241,230,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(46,42,36,0.08);
+  }
+  .navbar{
+    max-width:960px;margin:0 auto;padding:18px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Shippori Mincho', serif;
+    font-size:19px;font-weight:600;letter-spacing:0.06em;color:var(--indigo);
+  }
+  .brand .mark{
+    width:26px;height:26px;flex:none;
+  }
+  .navbar nav{display:flex;gap:28px;font-size:13.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+  .navbar nav a{text-decoration:none;transition:color .2s;}
+  .navbar nav a:hover{color:var(--gold);}
+  .menu-toggle{
+    display:none;
+    width:38px;height:38px;
+    border:none;background:transparent;
+    cursor:pointer;
+    align-items:center;justify-content:center;
+    flex:none;
+  }
+  .menu-toggle span{
+    display:block;
+    width:20px;height:1.4px;
+    background:var(--indigo);
+    position:relative;
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .menu-toggle span::before,
+  .menu-toggle span::after{
+    content:'';
+    position:absolute;left:0;
+    width:20px;height:1.4px;
+    background:var(--indigo);
+    transition:transform .25s ease, top .25s ease;
+  }
+  .menu-toggle span::before{ top:-7px; }
+  .menu-toggle span::after{ top:7px; }
+  .menu-toggle.open span{ background:transparent; }
+  .menu-toggle.open span::before{ top:0; transform:rotate(45deg); }
+  .menu-toggle.open span::after{ top:0; transform:rotate(-45deg); }
+  .mobile-nav{
+    display:none;
+    flex-direction:column;
+    max-height:0;
+    overflow:hidden;
+    background:var(--paper);
+    border-top:1px solid rgba(46,42,36,0.08);
+    transition:max-height .3s ease;
+  }
+  .mobile-nav a{
+    display:block;
+    padding:16px 28px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    letter-spacing:0.04em;
+    border-bottom:1px solid rgba(46,42,36,0.06);
+  }
+  .mobile-nav a:last-child{border-bottom:none;}
+  .mobile-nav a:active{color:var(--gold);}
+  @media (max-width:640px){
+    .navbar nav{display:none;}
+    .menu-toggle{display:inline-flex;}
+    .mobile-nav{display:flex;}
+    .mobile-nav.open{max-height:160px;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:radial-gradient(120% 140% at 50% -10%, #2C3E60 0%, #1D2A44 45%, #141D2E 100%);
+    padding:120px 0 130px;
+    color:#F3EEE0;
+    text-align:center;
+  }
+  .stars{position:absolute;inset:0;pointer-events:none;}
+  .star{
+    position:absolute;background:#F3E3B8;border-radius:50%;
+    opacity:.55;
+    animation:twinkle 5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.15;}
+    50%{opacity:.85;}
+  }
+  .rings{
+    position:absolute; left:50%; top:38%; transform:translate(-50%,-50%);
+    width:640px; height:640px; max-width:150vw; max-height:150vw;
+    opacity:0.5;
+  }
+  .rings svg{width:100%;height:100%;}
+  .ring-spin{
+    animation:spin 120s linear infinite;
+    transform-origin:center;
+  }
+  .ring-spin-rev{
+    animation:spinrev 160s linear infinite;
+    transform-origin:center;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg);} }
+  @keyframes spinrev{ to{ transform:rotate(-360deg);} }
+
+  .hero-inner{position:relative;z-index:2;}
+  .eyebrow{
+    font-size:12.5px;
+    letter-spacing:0.32em;
+    color:var(--gold-soft);
+    margin:0 0 22px;
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(40px, 6vw, 60px);
+    font-weight:600;
+    margin:0 0 18px;
+    letter-spacing:0.08em;
+    color:#F7F1E6;
+  }
+  .hero p.lead{
+    font-size:16px;
+    color:#C9CDD9;
+    max-width:480px;
+    margin:0 auto 40px;
+    font-weight:300;
+    letter-spacing:0.02em;
+  }
+  .divider-gold{
+    width:64px;height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+    margin:0 auto 34px;
+  }
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+    color:#2A2114;
+    border:none;
+    padding:15px 34px;
+    border-radius:999px;
+    font-family:'Shippori Mincho', serif;
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    box-shadow:0 10px 26px rgba(182,141,64,0.35);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(182,141,64,0.45); }
+  .btn-primary:active{ transform:translateY(0); }
+
+  /* ---------- intro ---------- */
+  .intro{
+    text-align:center;
+    scroll-margin-top:84px;
+  }
+  .intro .kicker{
+    color:var(--gold);
+    font-size:12.5px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .intro h2{
+    font-size:28px;
+    color:var(--indigo);
+    margin:0 0 22px;
+    letter-spacing:0.04em;
+  }
+  .intro p{
+    color:var(--ink-soft);
+    max-width:600px;
+    margin:0 auto;
+    font-size:15px;
+  }
+  .pillars-preview{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:52px;
+    flex-wrap:wrap;
+  }
+  .preview-card{
+    width:104px;
+    padding:20px 8px 16px;
+    background:var(--paper);
+    border:1px solid rgba(46,42,36,0.08);
+    border-radius:14px;
+    box-shadow:var(--shadow-soft);
+  }
+  .preview-card .glyph{
+    font-family:'Shippori Mincho', serif;
+    font-size:26px;
+    color:var(--indigo);
+    writing-mode:vertical-rl;
+    margin:0 auto 10px;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    letter-spacing:0.15em;
+  }
+  .preview-card .cap{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    letter-spacing:0.1em;
+  }
+
+  /* ---------- form ---------- */
+  .form-section{
+    background:var(--paper);
+    border-top:1px solid rgba(46,42,36,0.07);
+    border-bottom:1px solid rgba(46,42,36,0.07);
+    scroll-margin-top:84px;
+  }
+  .form-card{
+    max-width:560px;
+    margin:0 auto;
+    background:#fff;
+    border:1px solid rgba(46,42,36,0.08);
+    border-radius:20px;
+    padding:44px 40px;
+    box-shadow:var(--shadow);
+  }
+  @media (max-width:640px){ .form-card{padding:32px 22px;} }
+  .form-card h3{
+    text-align:center;
+    font-size:22px;
+    color:var(--indigo);
+    margin:0 0 8px;
+    letter-spacing:0.05em;
+  }
+  .form-card .sub{
+    text-align:center;
+    font-size:13px;
+    color:var(--ink-faint);
+    margin:0 0 32px;
+  }
+  .field{margin-bottom:22px;}
+  .field label{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .field input[type="date"],
+  .field input[type="time"]{
+    display:block;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    -webkit-appearance:none;
+    appearance:none;
+    padding:13px 14px;
+    border-radius:10px;
+    border:1px solid rgba(46,42,36,0.16);
+    background:var(--bg);
+    font-family:'Noto Sans JP', sans-serif;
+    font-size:15px;
+    color:var(--ink);
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(182,141,64,0.15);
+  }
+  .checkline{
+    display:flex;align-items:center;gap:9px;
+    font-size:13px;color:var(--ink-soft);
+    margin-top:10px;
+  }
+  .checkline input{accent-color:var(--gold);}
+  .form-card .btn-primary{
+    width:100%;
+    justify-content:center;
+    margin-top:8px;
+    background:linear-gradient(180deg, var(--indigo), var(--indigo-deep));
+    color:#F3EEE0;
+    box-shadow:0 10px 24px rgba(23,33,54,0.28);
+  }
+  .form-card .btn-primary:hover{ box-shadow:0 14px 28px rgba(23,33,54,0.36); }
+  .error-msg{
+    color:var(--fire);
+    font-size:12.5px;
+    text-align:center;
+    margin-top:14px;
+    display:none;
+  }
+
+  /* ---------- result ---------- */
+  #result{display:none; scroll-margin-top:84px;}
+  .result-intro{text-align:center;margin-bottom:52px;}
+  .result-intro .kicker{
+    color:var(--gold);font-size:12.5px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .result-intro h2{font-size:26px;color:var(--indigo);margin:0 0 10px;}
+  .result-intro p{color:var(--ink-faint);font-size:13.5px;}
+
+  .pillars-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:56px;
+  }
+  @media (max-width:640px){
+    .pillars-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  .tablet{
+    position:relative;
+    background:linear-gradient(180deg, #FBF7EE, #F3ECDA);
+    border:1px solid rgba(46,42,36,0.10);
+    border-radius:16px;
+    padding:26px 10px 20px;
+    text-align:center;
+    box-shadow:var(--shadow-soft);
+  }
+  .tablet .top-bar{
+    position:absolute;top:0;left:14px;right:14px;height:4px;
+    border-radius:0 0 4px 4px;
+  }
+  .tablet .role{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    letter-spacing:0.18em;
+    margin-bottom:16px;
+  }
+  .tablet .kanji{
+    font-family:'Shippori Mincho', serif;
+    writing-mode:vertical-rl;
+    font-size:30px;
+    letter-spacing:0.22em;
+    color:var(--indigo);
+    height:92px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 14px;
+  }
+  .tablet .meta{
+    font-size:11px;
+    color:var(--ink-faint);
+    letter-spacing:0.04em;
+  }
+  .tablet .dots{
+    display:flex;justify-content:center;gap:6px;margin-top:12px;
+  }
+  .tablet .dot{width:7px;height:7px;border-radius:50%;}
+
+  .day-master{
+    max-width:720px;margin:0 auto 56px;
+    background:linear-gradient(135deg, rgba(35,50,79,0.05), rgba(182,141,64,0.06));
+    border:1px solid var(--gold-line);
+    border-radius:20px;
+    padding:36px 38px;
+  }
+  @media (max-width:640px){ .day-master{padding:26px 22px;} }
+  .day-master .label{
+    font-size:12px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;
+  }
+  .day-master h3{
+    font-size:24px;color:var(--indigo);margin:0 0 14px;letter-spacing:0.04em;
+  }
+  .day-master p{color:var(--ink-soft);font-size:14.5px;margin:0;}
+
+  .balance-block{
+    max-width:720px;margin:0 auto 56px;
+  }
+  .balance-block h3{
+    text-align:center;font-size:20px;color:var(--indigo);margin:0 0 30px;letter-spacing:0.04em;
+  }
+  .bal-row{
+    display:flex;align-items:center;gap:16px;margin-bottom:14px;
+  }
+  .bal-row .name{
+    width:56px;flex:none;font-size:13.5px;color:var(--ink-soft);text-align:right;
+  }
+  .bal-track{
+    flex:1;height:10px;background:var(--bg-soft);border-radius:6px;overflow:hidden;
+  }
+  .bal-fill{
+    height:100%;border-radius:6px;
+    transition:width 1s ease;
+    width:0;
+  }
+  .bal-row .count{
+    width:20px;flex:none;font-size:12.5px;color:var(--ink-faint);
+  }
+
+  .reading-block{
+    max-width:720px;margin:0 auto;
+    background:var(--paper);
+    border:1px solid rgba(46,42,36,0.08);
+    border-radius:20px;
+    padding:40px 42px;
+    box-shadow:var(--shadow-soft);
+  }
+  @media (max-width:640px){ .reading-block{padding:28px 24px;} }
+  .reading-block h3{
+    font-size:20px;color:var(--indigo);margin:0 0 18px;letter-spacing:0.04em;
+  }
+  .reading-block p{color:var(--ink-soft);font-size:14.5px;margin:0 0 16px;}
+  .reading-block p:last-child{margin-bottom:0;}
+
+  .daily-section{
+    max-width:720px;margin:0 auto 56px;
+    display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  }
+  @media (max-width:640px){ .daily-section{grid-template-columns:1fr;} }
+  .daily-card{
+    background:var(--paper);
+    border:1px solid rgba(46,42,36,0.08);
+    border-radius:18px;
+    padding:30px 26px;
+    box-shadow:var(--shadow-soft);
+  }
+  .daily-card .dhead{
+    display:flex;align-items:center;gap:9px;margin-bottom:4px;
+  }
+  .daily-card .dhead svg{width:19px;height:19px;flex:none;}
+  .daily-card .dtitle{
+    font-family:'Shippori Mincho', serif;
+    font-size:16px;color:var(--indigo);letter-spacing:0.06em;
+  }
+  .daily-card .ddate{
+    font-size:11.5px;color:var(--ink-faint);margin:0 0 18px;
+  }
+  .daily-card .dganzhi{
+    display:flex;align-items:baseline;gap:12px;margin-bottom:14px;
+  }
+  .daily-card .dganzhi .glyph{
+    font-family:'Shippori Mincho', serif;font-size:24px;color:var(--indigo);letter-spacing:0.08em;
+  }
+  .daily-card .dganzhi .danimal{
+    font-size:12px;color:var(--ink-faint);
+  }
+  .daily-card .badge{
+    display:inline-block;font-size:11px;letter-spacing:0.06em;
+    padding:4px 12px;border-radius:999px;
+    background:rgba(182,141,64,0.12);color:var(--gold);
+    margin-bottom:16px;
+  }
+  .daily-card h4{
+    font-size:12px;color:var(--ink-soft);letter-spacing:0.1em;margin:18px 0 6px;
+    text-transform:uppercase;
+  }
+  .daily-card p{font-size:13.5px;color:var(--ink-soft);margin:0;line-height:1.85;}
+  .lucky-list{list-style:none;padding:0;margin:6px 0 0;}
+  .lucky-list li{
+    font-size:13px;color:var(--ink-soft);display:flex;gap:8px;margin-bottom:5px;
+  }
+  .lucky-list li .lk{
+    color:var(--ink-faint);min-width:52px;flex:none;
+  }
+
+  .hero-streak{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(216,189,134,0.14);
+    border:1px solid rgba(216,189,134,0.35);
+    color:var(--gold-soft);
+    font-size:12.5px;letter-spacing:0.05em;
+    padding:8px 18px;border-radius:999px;
+    margin:0 auto 28px;
+  }
+
+  .welcome-back{
+    max-width:560px;margin:0 auto 28px;
+    background:linear-gradient(135deg, rgba(35,50,79,0.05), rgba(182,141,64,0.07));
+    border:1px solid var(--gold-line);
+    border-radius:18px;
+    padding:26px 30px;
+    text-align:center;
+    display:none;
+  }
+  .welcome-back .streak-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(182,141,64,0.14);
+    color:var(--gold);
+    padding:6px 16px;border-radius:999px;
+    font-size:12px;letter-spacing:0.04em;margin-bottom:14px;
+  }
+  .welcome-back p{
+    margin:0 0 18px;font-size:13.5px;color:var(--ink-soft);
+  }
+  .welcome-back .btn-primary{
+    background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+    color:#2A2114;
+    box-shadow:0 10px 22px rgba(182,141,64,0.3);
+    font-size:14.5px;
+    padding:13px 30px;
+  }
+
+  .again-wrap{text-align:center;margin-top:48px;}
+  .btn-ghost{
+    display:inline-block;
+    padding:12px 28px;
+    border-radius:999px;
+    border:1px solid rgba(46,42,36,0.2);
+    color:var(--ink-soft);
+    font-size:13.5px;
+    letter-spacing:0.06em;
+    cursor:pointer;
+    background:transparent;
+    transition:border-color .2s, color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:44px 0 60px;
+    text-align:center;
+  }
+  footer .note{
+    font-size:12px;
+    color:var(--ink-faint);
+    max-width:520px;
+    margin:0 auto 10px;
+    line-height:1.8;
+  }
+  footer .fbrand{
+    font-family:'Shippori Mincho', serif;
+    color:var(--indigo);
+    font-size:14px;
+    letter-spacing:0.1em;
+    margin-bottom:14px;
+  }
+
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="navbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14.5" fill="none" stroke="#B68D40" stroke-width="1.2"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="#23324F" stroke-width="1.2"/><circle cx="16" cy="16" r="2" fill="#B68D40"/></svg>
+      星導 SEIDOU
+    </div>
+    <nav>
+      <a href="#intro">四柱推命とは</a>
+      <a href="#form">占う</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="メニューを開く" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#intro">四柱推命とは</a>
+    <a href="#form">占う</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="stars" id="stars"></div>
+  <div class="rings">
+    <svg viewBox="0 0 640 640">
+      <g class="ring-spin">
+        <circle cx="320" cy="320" r="260" fill="none" stroke="#D8BD86" stroke-width="0.6" stroke-dasharray="2 10"/>
+      </g>
+      <g class="ring-spin-rev">
+        <circle cx="320" cy="320" r="200" fill="none" stroke="#D8BD86" stroke-width="0.6" stroke-dasharray="1 8"/>
+      </g>
+      <circle cx="320" cy="320" r="150" fill="none" stroke="#D8BD86" stroke-width="0.5" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Four Pillars of Destiny</p>
+    <h1>四柱推命</h1>
+    <div class="divider-gold"></div>
+    <p class="lead">生まれた年・月・日・時に宿る干支から、あなたの本質と流れをそっと読み解きます。</p>
+    <div><span class="hero-streak" id="heroStreak"></span></div>
+    <a href="#form"><button class="btn-primary">生年月日で占う</button></a>
+  </div>
+</section>
+
+<section class="intro" id="intro">
+  <div class="wrap">
+    <p class="kicker">About</p>
+    <h2>四柱推命とは</h2>
+    <p>四柱推命は、生年月日と生まれた時刻を「年柱・月柱・日柱・時柱」という四本の柱に置き換え、そこに刻まれた十干十二支の組み合わせから、生まれ持った性質や運気の流れを読み解く、東洋に古くから伝わる占術です。特に「日柱」に表れる干は日主（にっしゅ）と呼ばれ、あなた自身の中心的な気質を映すとされています。</p>
+    <div class="pillars-preview">
+      <div class="preview-card"><div class="glyph">年柱</div><div class="cap">YEAR</div></div>
+      <div class="preview-card"><div class="glyph">月柱</div><div class="cap">MONTH</div></div>
+      <div class="preview-card"><div class="glyph">日柱</div><div class="cap">DAY</div></div>
+      <div class="preview-card"><div class="glyph">時柱</div><div class="cap">HOUR</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section" id="form">
+  <div class="wrap">
+    <div class="welcome-back" id="welcomeBack">
+      <span class="streak-pill" id="streakPill"></span>
+      <p>前回の生年月日を記憶しています。同じ内容でよろしければ、今日の運勢をすぐに確認できます。</p>
+      <button class="btn-primary" id="quickCheckBtn">今日の運勢をすぐ見る</button>
+    </div>
+    <div class="form-card">
+      <h3>生年月日をお聞かせください</h3>
+      <p class="sub">静かな気持ちで、ご自身の生まれた瞬間を思い浮かべながら</p>
+
+      <div class="field">
+        <label for="birthdate">生年月日</label>
+        <input type="date" id="birthdate" min="1900-01-01" max="2026-12-31">
+      </div>
+
+      <div class="field">
+        <label for="birthtime">出生時刻</label>
+        <input type="time" id="birthtime">
+        <div class="checkline">
+          <input type="checkbox" id="unknownTime">
+          <label for="unknownTime" style="margin:0;">出生時刻がわからない</label>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="calcBtn">占う</button>
+      <p class="error-msg" id="errorMsg">生年月日を選択してください。</p>
+    </div>
+  </div>
+</section>
+
+<section id="result">
+  <div class="wrap">
+    <div class="result-intro">
+      <p class="kicker">Your Reading</p>
+      <h2>あなたの命式</h2>
+      <p id="resultDateLabel"></p>
+    </div>
+
+    <div class="pillars-grid" id="pillarsGrid"></div>
+
+    <div class="day-master">
+      <p class="label">日主 - あなたの中心</p>
+      <h3 id="dmTitle"></h3>
+      <p id="dmText"></p>
+    </div>
+
+    <div class="balance-block">
+      <h3>五行のバランス</h3>
+      <div id="balanceRows"></div>
+    </div>
+
+    <div class="reading-block">
+      <h3>総合リーディング</h3>
+      <p id="readingText1"></p>
+      <p id="readingText2"></p>
+    </div>
+
+    <div class="daily-section" id="dailySection">
+      <div class="daily-card" id="todayCard"></div>
+      <div class="daily-card" id="tomorrowCard"></div>
+    </div>
+
+    <div class="again-wrap">
+      <button class="btn-ghost" id="againBtn">もう一度占う</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">星導 SEIDOU</div>
+  <p class="note">本サイトの鑑定は簡易的な計算に基づく娯楽・参考目的のものです。節気の境界や地方時の扱いなどは簡略化されており、専門的な鑑定とは結果が異なる場合があります。人生の重要な判断はご自身の意思を大切になさってください。</p>
+</footer>
+
+<script>
+(function(){
+  var starsWrap = document.getElementById('stars');
+  var n = 46;
+  for(var i=0;i<n;i++){
+    var s = document.createElement('div');
+    s.className='star';
+    var size = (Math.random()*2+1).toFixed(1);
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.animationDelay = (Math.random()*5).toFixed(2)+'s';
+    s.style.animationDuration = (3+Math.random()*4).toFixed(2)+'s';
+    starsWrap.appendChild(s);
+  }
+})();
+
+(function(){
+  var toggle = document.getElementById('menuToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  function closeMenu(){
+    toggle.classList.remove('open');
+    mobileNav.classList.remove('open');
+    toggle.setAttribute('aria-expanded','false');
+  }
+  toggle.addEventListener('click', function(){
+    var isOpen = mobileNav.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  mobileNav.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+})();
+
+var STEMS = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+var STEMS_READ = ["きのえ","きのと","ひのえ","ひのと","つちのえ","つちのと","かのえ","かのと","みずのえ","みずのと"];
+var BRANCHES = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+var BRANCH_ANIMAL = ["ねずみ","うし","とら","う","たつ","へび","うま","ひつじ","さる","とり","いぬ","いのしし"];
+var STEM_ELEM = ["木","木","火","火","土","土","金","金","水","水"];
+var BRANCH_ELEM = ["水","土","木","木","土","火","火","土","金","金","土","水"];
+var ELEM_COLOR = {"木":"var(--wood)","火":"var(--fire)","土":"var(--earth)","金":"var(--metal)","水":"var(--water)"};
+var ELEM_NAME = {"木":"木","火":"火","土":"土","金":"金","水":"水"};
+
+var DM_TEXT = {
+  0:["甲（きのえ）｜大樹の木","まっすぐに空へ伸びる大木のような日主です。芯が強く、正直で向上心があり、人の先頭に立つことを厭いません。一方で頑固さが出やすいので、周囲の声にも耳を傾けるとさらに力を発揮できます。"],
+  1:["乙（きのと）｜草花の木","風になびきながらもしなやかに根を張る草花のような日主です。協調性があり、繊細な美意識と柔軟さを持ちますが、時に依存心が出やすいので、自分の軸を持つことが鍵になります。"],
+  2:["丙（ひのえ）｜太陽の火","すべてを照らす太陽のように、明るく情熱的でエネルギッシュな日主です。人を惹きつける華やかさがありますが、燃え尽きやすい面もあるため、休息とのバランスが大切です。"],
+  3:["丁（ひのと）｜灯火の火","ろうそくの灯りのように静かで温かな光を放つ日主です。繊細な感受性と思いやりを持ち、少人数で深く関わることを好みます。感情の波を穏やかに保つ工夫が力になります。"],
+  4:["戊（つちのえ）｜山の土","どっしりと構えた山のように、安定感と包容力を持つ日主です。信頼され頼られる存在ですが、変化への対応がやや苦手な面も。新しい風を取り入れる柔軟さが成長の鍵です。"],
+  5:["己（つちのと）｜田畑の土","作物を育む田畑のように、地道な努力で周囲を支える日主です。世話好きで誠実ですが、自分を後回しにしがち。自分自身への労いも忘れずに。"],
+  6:["庚（かのえ）｜鉄鉱の金","鍛えられる前の鉱石のように、強い意志と決断力を持つ日主です。正義感が強く筋を通しますが、融通が利きにくいことも。柔らかな表現を添えると人間関係がより円滑になります。"],
+  7:["辛（かのと）｜宝石の金","磨き抜かれた宝石のように、繊細で美しいものを見抜く感性を持つ日主です。プライドが高く傷つきやすい一面もありますが、それは高い理想を持つ証でもあります。"],
+  8:["壬（みずのえ）｜大河の水","大きな川のように、自由でスケールの大きな発想を持つ日主です。順応性が高く広い視野を持ちますが、掴みどころのなさを指摘されることも。目標を言葉にすると力が定まります。"],
+  9:["癸（みずのと）｜雨露の水","静かに大地を潤す雨露のような日主です。直感力と洞察力に優れ、繊細な気配りができますが、内に溜め込みやすい面も。信頼できる相手に気持ちを話す時間を大切に。"]
+};
+
+var ELEM_BALANCE_TEXT = {
+  "木":"木は成長と発展の気。伸びやかな行動力と柔軟な適応力の源になります。",
+  "火":"火は情熱と表現の気。人を惹きつける明るさと直感的な発想力を支えます。",
+  "土":"土は安定と包容の気。物事をじっくり育て、周囲を支える力になります。",
+  "金":"金は決断と洗練の気。筋を通す意志の強さと美意識を育みます。",
+  "水":"水は知恵と柔軟の気。物事の本質を見抜く洞察力と適応力を与えます。"
+};
+
+var GENERATE_MAP = {"木":"火","火":"土","土":"金","金":"水","水":"木"};
+var CONTROL_MAP = {"木":"土","土":"水","水":"火","火":"金","金":"木"};
+var WEEKDAY_JP = ["日","月","火","水","木","金","土"];
+
+var RELATION_INFO = {
+  hiwa:{
+    title:"本来のペースを取り戻す日",
+    fortune:[
+      "あなたと同じ気が巡る、いわば「地の色」が濃くなる日です。無理に周囲に合わせるより、自分の感覚とペースを信じて動くとうまくいきやすいでしょう。",
+      "似た気質の日が重なり、迷いなく自分らしい選択がしやすいでしょう。周囲と歩調を合わせるよりも、まず自分の心地よさを優先して。",
+      "自分の内側にある価値観がそのまま行動に表れやすい日。飾らない自然体でいることが、良い流れを引き寄せます。"
+    ],
+    caution:[
+      "我を通しすぎると意固地に見られることも。相手の意見にも耳を傾ける余白を持って。",
+      "視野が狭くなりやすいので、いつもと違う考え方にも触れてみると気づきが得られます。",
+      "自分の正しさにこだわりすぎず、柔らかい姿勢を意識すると人間関係が円滑に。"
+    ]
+  },
+  shokushou:{
+    title:"表現力が高まる日",
+    fortune:[
+      "内側にある考えやアイデアが、自然と外へ流れ出しやすい日。企画や発信、会話など、自分を表現する場面で力を発揮できます。",
+      "アイデアが次々と湧きやすく、手を動かすほど形になっていく日。創作や企画ごとに向いています。",
+      "言葉や表情が豊かになりやすく、人とのコミュニケーションが弾みます。伝える力を活かして。"
+    ],
+    caution:[
+      "話しすぎ・動きすぎでエネルギーを使い切らないよう、ペース配分を意識して。",
+      "勢いに任せて発言すると後で誤解を招くことも。伝える前に一呼吸置くと安心です。",
+      "予定を詰め込みすぎるとペースが乱れがち。余白を残しておきましょう。"
+    ]
+  },
+  inju:{
+    title:"学びと休息の日",
+    fortune:[
+      "外から知識やサポートを受け取りやすい、静かな充電日。読書や勉強、信頼できる人に相談することが力になります。",
+      "誰かの言葉や本の一節が、思いがけず力になる日。焦らずインプットの時間を大切に。",
+      "心身を休めることが、この先の力を蓄えることにつながります。無理に動かず流れに委ねて。"
+    ],
+    caution:[
+      "受け身になりすぎると流されやすいので、最終判断は自分の意思で。",
+      "人の意見に流されすぎると、本来の目的を見失うことも。芯だけは持っておきましょう。",
+      "受け取るばかりで返すことを忘れないよう、感謝の気持ちを言葉にすると良い日。"
+    ]
+  },
+  zai:{
+    title:"行動と実りの日",
+    fortune:[
+      "これまでの積み重ねが形になりやすく、行動力がそのまま成果につながりやすい日。交渉や決断ごとにも向いています。",
+      "計画してきたことを実行に移すのに向いている日。小さな一歩でも着実に前進できます。",
+      "周囲を巻き込みながら物事を進めやすく、協力によって成果が大きくなりやすいでしょう。"
+    ],
+    caution:[
+      "結果を急ぐあまり周囲への配慮が薄くなりがち。感謝の言葉を忘れずに。",
+      "利益を優先しすぎると信頼を損なうことも。目先の得より長い目で見た判断を。",
+      "忙しさに追われて大切な人との時間を後回しにしないよう気をつけて。"
+    ]
+  },
+  kansatsu:{
+    title:"慎重さが鍵となる日",
+    fortune:[
+      "外からの制約やプレッシャーを感じやすい、身を引き締める日。丁寧に取り組めば、責任ある役割で信頼を得られます。",
+      "任された役割の重みを感じやすい日。丁寧に取り組むことで評価や信頼につながります。",
+      "予定外の出来事に振り回されやすいので、心にゆとりを持ったスケジュールを。"
+    ],
+    caution:[
+      "無理に押し通そうとせず、一呼吸置いてから動くと余計なトラブルを避けられます。",
+      "強い言葉や態度で押し通そうとすると、思わぬ反発を招くことも。柔らかい伝え方を心がけて。",
+      "無理を重ねると体調に響きやすいので、休む勇気も大切に。"
+    ]
+  }
+};
+
+var ELEMENT_LUCKY = {
+  "木":[
+    {color:"グリーン系", item:"観葉植物や木製の小物", direction:"東", number:"3・8"},
+    {color:"若草色やオリーブグリーン", item:"木製のアクセサリーやウッド調の文房具", direction:"東南", number:"1・3"},
+    {color:"深緑やモスグリーン", item:"ドライフラワーや小さな鉢植え", direction:"東", number:"8・9"}
+  ],
+  "火":[
+    {color:"レッドやオレンジ", item:"キャンドルや赤い差し色のアイテム", direction:"南", number:"2・7"},
+    {color:"サーモンピンクや朱色", item:"アロマキャンドルや照明まわりの小物", direction:"南", number:"3・7"},
+    {color:"コーラルオレンジ", item:"写真やメッセージカードなど気持ちを伝えるもの", direction:"南東", number:"2・9"}
+  ],
+  "土":[
+    {color:"イエローやベージュ", item:"陶器やアースカラーの小物", direction:"中央・南西", number:"5・10"},
+    {color:"テラコッタやサンドベージュ", item:"焼き物のマグカップや器", direction:"南西", number:"5・6"},
+    {color:"からし色やライトブラウン", item:"革小物やナチュラル素材の雑貨", direction:"北東", number:"2・5"}
+  ],
+  "金":[
+    {color:"ホワイトやゴールド", item:"アクセサリーなど金属製の小物", direction:"西", number:"4・9"},
+    {color:"シルバーやパールホワイト", item:"腕時計や鏡など光るもの", direction:"西", number:"6・9"},
+    {color:"シャンパンゴールド", item:"金属フレームの小物やコイン", direction:"北西", number:"4・7"}
+  ],
+  "水":[
+    {color:"ブルーやブラック", item:"ガラスや水辺を感じるモチーフ", direction:"北", number:"1・6"},
+    {color:"ネイビーやミッドナイトブルー", item:"水筒やグラスなどガラス製品", direction:"北", number:"1・4"},
+    {color:"スモーキーブルー", item:"手帳やノートなど言葉を綴るもの", direction:"北東", number:"6・8"}
+  ]
+};
+
+var ICON_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="#B68D40" stroke-width="1.4"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-linecap="round"/></svg>';
+var ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="#23324F" stroke-width="1.4"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z" stroke-linejoin="round"/></svg>';
+
+function elementRelation(dm, target){
+  if(dm===target) return "hiwa";
+  if(GENERATE_MAP[dm]===target) return "shokushou";
+  if(GENERATE_MAP[target]===dm) return "inju";
+  if(CONTROL_MAP[dm]===target) return "zai";
+  if(CONTROL_MAP[target]===dm) return "kansatsu";
+  return "hiwa";
+}
+
+function dateParts(offsetDays){
+  var now = new Date();
+  now.setDate(now.getDate()+offsetDays);
+  return {y:now.getFullYear(), m:now.getMonth()+1, d:now.getDate(), weekday:now.getDay()};
+}
+
+function renderDailyCard(containerId, iconSvg, labelText, parts, dmElement){
+  var pillar = dayPillar(parts.y, parts.m, parts.d);
+  var stemChar = STEMS[pillar.stem];
+  var branchChar = BRANCHES[pillar.branch];
+  var targetElement = STEM_ELEM[pillar.stem];
+  var relKey = elementRelation(dmElement, targetElement);
+  var info = RELATION_INFO[relKey];
+  var variantIdx = pillar.branch % 3;
+  var fortuneText = info.fortune[variantIdx];
+  var cautionText = info.caution[variantIdx];
+  var luckyVariantIdx = (pillar.stem + pillar.branch) % 3;
+  var lucky = ELEMENT_LUCKY[targetElement][luckyVariantIdx];
+  var dateLabel = parts.y+"年"+parts.m+"月"+parts.d+"日（"+WEEKDAY_JP[parts.weekday]+"）";
+
+  var html =
+    '<div class="dhead">'+iconSvg+'<span class="dtitle">'+labelText+'の運勢</span></div>'+
+    '<p class="ddate">'+dateLabel+'</p>'+
+    '<div class="dganzhi">'+
+      '<span class="glyph">'+stemChar+branchChar+'</span>'+
+      '<span class="danimal">'+BRANCH_ANIMAL[pillar.branch]+'の日 ・ '+targetElement+'の気</span>'+
+    '</div>'+
+    '<span class="badge">'+info.title+'</span>'+
+    '<h4>運勢</h4><p>'+fortuneText+'</p>'+
+    '<h4>注意事項</h4><p>'+cautionText+'</p>'+
+    '<h4>ラッキーアイテム</h4>'+
+    '<ul class="lucky-list">'+
+      '<li><span class="lk">カラー</span>'+lucky.color+'</li>'+
+      '<li><span class="lk">アイテム</span>'+lucky.item+'</li>'+
+      '<li><span class="lk">方角</span>'+lucky.direction+'</li>'+
+      '<li><span class="lk">数字</span>'+lucky.number+'</li>'+
+    '</ul>';
+
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function pad(n){ return n<10 ? "0"+n : ""+n; }
+
+function dayPillar(y,m,d){
+  var anchor = Date.UTC(1900,0,31);
+  var target = Date.UTC(y,m-1,d);
+  var diff = Math.round((target-anchor)/86400000);
+  var stem = ((diff%10)+10)%10;
+  var branch = ((diff%12)+12)%12;
+  return {stem:stem, branch:branch};
+}
+
+function yearPillar(y,m,d){
+  var effYear = (m>2 || (m===2 && d>=4)) ? y : y-1;
+  var offset = effYear - 1984;
+  var stem = ((offset%10)+10)%10;
+  var branch = ((offset%12)+12)%12;
+  return {stem:stem, branch:branch};
+}
+
+function monthBranchOf(y,m,d){
+  var bounds = [
+    [1,6,1],[2,4,2],[3,6,3],[4,5,4],[5,6,5],[6,6,6],
+    [7,7,7],[8,8,8],[9,8,9],[10,8,10],[11,7,11],[12,7,0]
+  ];
+  var branch = 0;
+  for(var i=0;i<bounds.length;i++){
+    var bm=bounds[i][0], bd=bounds[i][1], br=bounds[i][2];
+    if(m>bm || (m===bm && d>=bd)) branch = br;
+  }
+  return branch;
+}
+
+function monthPillar(y,m,d,yearStem){
+  var branch = monthBranchOf(y,m,d);
+  var group = yearStem % 5;
+  var startStem = [2,4,6,8,0][group];
+  var order = (branch - 2 + 12) % 12;
+  var stem = (startStem + order) % 10;
+  return {stem:stem, branch:branch};
+}
+
+function hourBranchOf(hh){
+  var table = [
+    [23,0],[1,1],[3,2],[5,3],[7,4],[9,5],[11,6],[13,7],[15,8],[17,9],[19,10],[21,11]
+  ];
+  if(hh>=23 || hh<1) return 0;
+  for(var i=1;i<table.length;i++){
+    var startH = table[i][0], br = table[i][1];
+    var nextH = table[(i+1)%table.length][0];
+    if(hh>=startH && hh < (startH+2)) return br;
+  }
+  return 0;
+}
+
+function hourPillar(hh,dayStem){
+  var branch = hourBranchOf(hh);
+  var group = dayStem % 5;
+  var startStem = [0,2,4,6,8][group];
+  var stem = (startStem + branch) % 10;
+  return {stem:stem, branch:branch};
+}
+
+function buildTablet(role, stemIdx, branchIdx){
+  var stemChar = STEMS[stemIdx];
+  var branchChar = BRANCHES[branchIdx];
+  var stemElem = STEM_ELEM[stemIdx];
+  var branchElem = BRANCH_ELEM[branchIdx];
+  var div = document.createElement('div');
+  div.className = 'tablet';
+  div.innerHTML =
+    '<div class="top-bar" style="background:'+ELEM_COLOR[stemElem]+'"></div>'+
+    '<div class="role">'+role+'</div>'+
+    '<div class="kanji">'+stemChar+branchChar+'</div>'+
+    '<div class="meta">'+BRANCH_ANIMAL[branchIdx]+' ・ '+stemElem+branchElem+'</div>'+
+    '<div class="dots">'+
+      '<span class="dot" style="background:'+ELEM_COLOR[stemElem]+'"></span>'+
+      '<span class="dot" style="background:'+ELEM_COLOR[branchElem]+'"></span>'+
+    '</div>';
+  return div;
+}
+
+function runReading(){
+  var dateVal = document.getElementById('birthdate').value;
+  var errorMsg = document.getElementById('errorMsg');
+  if(!dateVal){
+    errorMsg.style.display = 'block';
+    return;
+  }
+  errorMsg.style.display = 'none';
+
+  var parts = dateVal.split('-');
+  var y = parseInt(parts[0],10), m = parseInt(parts[1],10), d = parseInt(parts[2],10);
+
+  var unknownTime = document.getElementById('unknownTime').checked;
+  var timeVal = document.getElementById('birthtime').value;
+  var hasTime = !unknownTime && !!timeVal;
+  var hh = hasTime ? parseInt(timeVal.split(':')[0],10) : null;
+
+  try{
+    localStorage.setItem('seidou_birthdate', dateVal);
+    localStorage.setItem('seidou_unknown_time', unknownTime ? '1' : '0');
+    localStorage.setItem('seidou_birthtime', timeVal || '');
+  } catch(e){}
+
+  var yp = yearPillar(y,m,d);
+  var mp = monthPillar(y,m,d,yp.stem);
+  var dp = dayPillar(y,m,d);
+  var hp = hasTime ? hourPillar(hh, dp.stem) : null;
+
+  document.getElementById('resultDateLabel').textContent =
+    y+'年'+m+'月'+d+'日'+(hasTime ? ' ' + pad(hh)+':'+timeVal.split(':')[1]+' 生まれ' : ' 生まれ（時刻不明）');
+
+  var grid = document.getElementById('pillarsGrid');
+  grid.innerHTML = '';
+  grid.appendChild(buildTablet('年柱 YEAR', yp.stem, yp.branch));
+  grid.appendChild(buildTablet('月柱 MONTH', mp.stem, mp.branch));
+  grid.appendChild(buildTablet('日柱 DAY', dp.stem, dp.branch));
+  if(hp){
+    grid.appendChild(buildTablet('時柱 HOUR', hp.stem, hp.branch));
+  } else {
+    var div = document.createElement('div');
+    div.className = 'tablet';
+    div.innerHTML = '<div class="top-bar" style="background:var(--metal)"></div>'+
+      '<div class="role">時柱 HOUR</div>'+
+      '<div class="kanji" style="font-size:14px;color:var(--ink-faint);writing-mode:horizontal-tb;">時刻<br>不明</div>'+
+      '<div class="meta">&nbsp;</div><div class="dots"></div>';
+    grid.appendChild(div);
+  }
+
+  var dm = DM_TEXT[dp.stem];
+  document.getElementById('dmTitle').textContent = dm[0];
+  document.getElementById('dmText').textContent = dm[1];
+
+  var counts = {"木":0,"火":0,"土":0,"金":0,"水":0};
+  counts[STEM_ELEM[yp.stem]]++; counts[BRANCH_ELEM[yp.branch]]++;
+  counts[STEM_ELEM[mp.stem]]++; counts[BRANCH_ELEM[mp.branch]]++;
+  counts[STEM_ELEM[dp.stem]]++; counts[BRANCH_ELEM[dp.branch]]++;
+  if(hp){ counts[STEM_ELEM[hp.stem]]++; counts[BRANCH_ELEM[hp.branch]]++; }
+
+  var total = hp ? 8 : 6;
+  var maxCount = Math.max.apply(null, Object.keys(counts).map(function(k){return counts[k];}));
+  var order = ["木","火","土","金","水"];
+  var balanceWrap = document.getElementById('balanceRows');
+  balanceWrap.innerHTML = '';
+  order.forEach(function(e){
+    var c = counts[e];
+    var pct = total ? Math.round((c/total)*100) : 0;
+    var row = document.createElement('div');
+    row.className = 'bal-row';
+    row.innerHTML =
+      '<div class="name">'+e+'</div>'+
+      '<div class="bal-track"><div class="bal-fill" style="background:'+ELEM_COLOR[e]+'"></div></div>'+
+      '<div class="count">'+c+'</div>';
+    balanceWrap.appendChild(row);
+    setTimeout((function(fillPct, rowEl){
+      return function(){
+        rowEl.querySelector('.bal-fill').style.width = fillPct+'%';
+      };
+    })(pct, row), 60);
+  });
+
+  var strongestElem = order.reduce(function(a,b){ return counts[b]>counts[a] ? b : a; }, order[0]);
+  var weakestElem = order.reduce(function(a,b){ return counts[b]<counts[a] ? b : a; }, order[0]);
+
+  document.getElementById('readingText1').textContent =
+    dm[0].split('｜')[0]+'を日主に持つあなたは、'+ELEM_BALANCE_TEXT[STEM_ELEM[dp.stem]]+' 命式全体では'+strongestElem+'の気が最も色濃く表れており、'+ELEM_BALANCE_TEXT[strongestElem];
+
+  document.getElementById('readingText2').textContent =
+    '一方で'+weakestElem+'の気はやや控えめです。日々の暮らしの中で'+weakestElem+'の性質（'+ELEM_NAME[weakestElem]+'）を意識的に取り入れることで、五行のバランスが整い、持ち前の力がより発揮されやすくなるでしょう。';
+
+  var dmElement = STEM_ELEM[dp.stem];
+  renderDailyCard('todayCard', ICON_SUN, '今日', dateParts(0), dmElement);
+  renderDailyCard('tomorrowCard', ICON_MOON, '明日', dateParts(1), dmElement);
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+document.getElementById('calcBtn').addEventListener('click', runReading);
+
+document.getElementById('quickCheckBtn').addEventListener('click', function(){
+  runReading();
+});
+
+document.getElementById('againBtn').addEventListener('click', function(){
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ---------- daily visit streak & returning-visitor shortcut ---------- */
+function todayStr(){
+  var t = new Date();
+  return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+}
+function yesterdayStr(){
+  var t = new Date(); t.setDate(t.getDate()-1);
+  return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+}
+function updateStreak(){
+  try{
+    var today = todayStr();
+    var last = localStorage.getItem('seidou_last_visit');
+    var streak = parseInt(localStorage.getItem('seidou_streak')||'0',10) || 0;
+    if(last === today){
+      if(streak < 1) streak = 1;
+    } else if(last === yesterdayStr()){
+      streak += 1;
+      localStorage.setItem('seidou_last_visit', today);
+      localStorage.setItem('seidou_streak', String(streak));
+    } else {
+      streak = 1;
+      localStorage.setItem('seidou_last_visit', today);
+      localStorage.setItem('seidou_streak', String(streak));
+    }
+    return streak;
+  } catch(e){
+    return 1;
+  }
+}
+
+function initPersonalization(){
+  var streak = updateStreak();
+  var streakText = streak >= 2 ? ('🔥 '+streak+'日連続のご来訪です') : '✨ 本日のご来訪、ありがとうございます';
+  var heroStreakEl = document.getElementById('heroStreak');
+  if(heroStreakEl) heroStreakEl.textContent = streakText;
+
+  try{
+    var savedDate = localStorage.getItem('seidou_birthdate');
+    if(savedDate){
+      document.getElementById('birthdate').value = savedDate;
+      var savedUnknown = localStorage.getItem('seidou_unknown_time') === '1';
+      var savedTime = localStorage.getItem('seidou_birthtime');
+      if(savedUnknown){
+        document.getElementById('unknownTime').checked = true;
+      } else if(savedTime){
+        document.getElementById('birthtime').value = savedTime;
+      }
+      var streakPillEl = document.getElementById('streakPill');
+      if(streakPillEl) streakPillEl.textContent = streakText;
+      var welcomeBackEl = document.getElementById('welcomeBack');
+      if(welcomeBackEl) welcomeBackEl.style.display = 'block';
+    }
+  } catch(e){}
+}
+
+initPersonalization();
+</script>
+
+</body>
+</html>
