@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>星導 - 四柱推命占い</title>
+<title>星導 SEIDOU - 四柱推命占い｜十干・十二支・五行でひも解く本質と運勢</title>
+<meta name="description" content="星導 SEIDOUは、生年月日から四柱推命（年柱・月柱・日柱・時柱）を算出し、十干・十二支・五行のバランスからあなたの本質と日々の運勢を読み解く無料の占いサイトです。十干や十二支、五行思想の基礎知識もあわせて解説しています。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -276,6 +277,79 @@
     color:var(--ink-faint);
     letter-spacing:0.1em;
   }
+
+  /* ---------- reference sections (十干・十二支・五行) ---------- */
+  .ref-section{ scroll-margin-top:84px; }
+  .ref-section.alt{ background:var(--paper); border-top:1px solid rgba(46,42,36,0.07); border-bottom:1px solid rgba(46,42,36,0.07); }
+  .ref-section .kicker{
+    color:var(--gold);font-size:12.5px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:16px;text-align:center;
+  }
+  .ref-section h2{
+    font-size:28px;color:var(--indigo);margin:0 0 18px;letter-spacing:0.04em;text-align:center;
+  }
+  .ref-lead{
+    color:var(--ink-soft);max-width:640px;margin:0 auto 44px;font-size:14.5px;text-align:center;
+  }
+  .info-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
+  }
+  @media (max-width:800px){ .info-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:480px){ .info-grid{grid-template-columns:repeat(2,1fr);} }
+  .info-card{
+    background:var(--paper);
+    border:1px solid rgba(46,42,36,0.08);
+    border-radius:16px;
+    padding:20px 14px;
+    text-align:center;
+    box-shadow:var(--shadow-soft);
+  }
+  .ref-section.alt .info-card{ background:#fff; }
+  .info-card .ikanji{
+    font-family:'Shippori Mincho', serif;
+    font-size:26px;color:var(--indigo);margin-bottom:8px;
+  }
+  .info-card .iread{ font-size:11px;color:var(--ink-faint);margin-bottom:6px; }
+  .info-card .ielem{
+    display:inline-block;font-size:10.5px;letter-spacing:0.06em;
+    padding:3px 10px;border-radius:999px;margin-bottom:10px;color:#fff;
+  }
+  .info-card .idesc{ font-size:12px;color:var(--ink-soft);line-height:1.7; }
+
+  .element-cycle{
+    max-width:760px;margin:44px auto 0;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:16px;
+  }
+  @media (max-width:640px){ .element-cycle{grid-template-columns:repeat(2,1fr);} }
+  .element-block{
+    background:#fff;border:1px solid rgba(46,42,36,0.08);border-radius:16px;
+    padding:26px 16px;text-align:center;box-shadow:var(--shadow-soft);
+  }
+  .element-block .eglyph{
+    font-family:'Shippori Mincho', serif;font-size:30px;margin-bottom:10px;
+  }
+  .element-block .ename{ font-size:12.5px;color:var(--ink-faint);letter-spacing:0.08em;margin-bottom:10px; }
+  .element-block p{ font-size:12.5px;color:var(--ink-soft);margin:0;line-height:1.75; }
+  .cycle-note{
+    max-width:640px;margin:32px auto 0;font-size:13px;color:var(--ink-soft);text-align:center;line-height:1.9;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ max-width:720px;margin:0 auto; }
+  .faq-item{
+    background:#fff;border:1px solid rgba(46,42,36,0.08);border-radius:14px;
+    padding:6px 24px;margin-bottom:14px;box-shadow:var(--shadow-soft);
+  }
+  .faq-item summary{
+    cursor:pointer;padding:18px 0;font-size:15px;color:var(--indigo);font-weight:500;
+    font-family:'Shippori Mincho', serif;letter-spacing:0.02em;list-style:none;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary::after{
+    content:'+';font-size:20px;color:var(--gold);flex:none;transition:transform .2s ease;
+  }
+  .faq-item[open] summary::after{ transform:rotate(45deg); }
+  .faq-item p{ font-size:13.5px;color:var(--ink-soft);margin:0 0 20px;line-height:1.9; }
 
   /* ---------- form ---------- */
   .form-section{
@@ -613,7 +687,11 @@
     </div>
     <nav>
       <a href="#intro">四柱推命とは</a>
+      <a href="#stems">十干</a>
+      <a href="#branches">十二支</a>
+      <a href="#gogyou">五行思想</a>
       <a href="#form">占う</a>
+      <a href="#faq">よくある質問</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="メニューを開く" aria-expanded="false">
       <span></span>
@@ -621,7 +699,11 @@
   </div>
   <div class="mobile-nav" id="mobileNav">
     <a href="#intro">四柱推命とは</a>
+    <a href="#stems">十干</a>
+    <a href="#branches">十二支</a>
+    <a href="#gogyou">五行思想</a>
     <a href="#form">占う</a>
+    <a href="#faq">よくある質問</a>
   </div>
 </header>
 
@@ -652,13 +734,73 @@
   <div class="wrap">
     <p class="kicker">About</p>
     <h2>四柱推命とは</h2>
-    <p>四柱推命は、生年月日と生まれた時刻を「年柱・月柱・日柱・時柱」という四本の柱に置き換え、そこに刻まれた十干十二支の組み合わせから、生まれ持った性質や運気の流れを読み解く、東洋に古くから伝わる占術です。特に「日柱」に表れる干は日主（にっしゅ）と呼ばれ、あなた自身の中心的な気質を映すとされています。</p>
+    <p>四柱推命（しちゅうすいめい）は、中国の古代思想である陰陽五行説を土台に、宋代の中国で体系化されたと伝わる命術です。日本には江戸時代に伝来し、以来「東洋占術の王様」とも呼ばれるほど的中率の高い占いとして親しまれてきました。生年月日と生まれた時刻を「年柱・月柱・日柱・時柱」という四本の柱に置き換え、そこに刻まれた十干（じっかん）と十二支（じゅうにし）の組み合わせから、生まれ持った性質や才能、そして時の流れとともに移り変わる運気を読み解きます。</p>
+    <p>四本の柱はそれぞれ異なる役割を持ちます。年柱は幼少期や家系・社会的な立場、月柱は青年期や仕事・対人関係、日柱は本人の中心的な性格、時柱は晩年期や子どもとの関係を映すとされています。なかでも「日柱」に表れる干は日主（にっしゅ）と呼ばれ、あなた自身の中心的な気質を映す最も重要な要素です。</p>
+    <p>また四柱推命では、命式の中にある十干・十二支を「木・火・土・金・水」という五行に置き換え、そのバランスを見ることも重視されます。五行が偏りなく巡っていれば安定した運勢、特定の気が強すぎたり弱すぎたりすると、そこに人生の課題や伸びしろが表れると考えられています。星導 SEIDOUでは、この考え方に基づいて命式を算出し、五行のバランスや日々の運勢の目安を分かりやすくお伝えします。</p>
     <div class="pillars-preview">
       <div class="preview-card"><div class="glyph">年柱</div><div class="cap">YEAR</div></div>
       <div class="preview-card"><div class="glyph">月柱</div><div class="cap">MONTH</div></div>
       <div class="preview-card"><div class="glyph">日柱</div><div class="cap">DAY</div></div>
       <div class="preview-card"><div class="glyph">時柱</div><div class="cap">HOUR</div></div>
     </div>
+  </div>
+</section>
+
+<section class="ref-section alt" id="stems">
+  <div class="wrap">
+    <p class="kicker">Heavenly Stems</p>
+    <h2>十干（じっかん）について</h2>
+    <p class="ref-lead">十干は、五行「木・火・土・金・水」のそれぞれを陽と陰に分けた、10種類の気の性質です。四柱推命では特に「日柱」に表れる干を日主（にっしゅ）と呼び、生まれ持った本質を映すものとして重視します。</p>
+    <div class="info-grid">
+      <div class="info-card"><div class="ikanji">甲</div><div class="iread">きのえ</div><span class="ielem" style="background:var(--wood)">木（陽）</span><div class="idesc">まっすぐに伸びる大樹。芯が強く向上心にあふれる。</div></div>
+      <div class="info-card"><div class="ikanji">乙</div><div class="iread">きのと</div><span class="ielem" style="background:var(--wood)">木（陰）</span><div class="idesc">しなやかに根を張る草花。柔軟で協調性がある。</div></div>
+      <div class="info-card"><div class="ikanji">丙</div><div class="iread">ひのえ</div><span class="ielem" style="background:var(--fire)">火（陽）</span><div class="idesc">すべてを照らす太陽。明るく情熱的でエネルギッシュ。</div></div>
+      <div class="info-card"><div class="ikanji">丁</div><div class="iread">ひのと</div><span class="ielem" style="background:var(--fire)">火（陰）</span><div class="idesc">静かに灯る火。繊細な感受性と思いやりを持つ。</div></div>
+      <div class="info-card"><div class="ikanji">戊</div><div class="iread">つちのえ</div><span class="ielem" style="background:var(--earth)">土（陽）</span><div class="idesc">どっしりとした山。安定感と包容力がある。</div></div>
+      <div class="info-card"><div class="ikanji">己</div><div class="iread">つちのと</div><span class="ielem" style="background:var(--earth)">土（陰）</span><div class="idesc">作物を育む田畑。地道な努力で周囲を支える。</div></div>
+      <div class="info-card"><div class="ikanji">庚</div><div class="iread">かのえ</div><span class="ielem" style="background:var(--metal)">金（陽）</span><div class="idesc">鍛えられる鉱石。強い意志と決断力を持つ。</div></div>
+      <div class="info-card"><div class="ikanji">辛</div><div class="iread">かのと</div><span class="ielem" style="background:var(--metal)">金（陰）</span><div class="idesc">磨かれた宝石。繊細で美しいものを見抜く感性。</div></div>
+      <div class="info-card"><div class="ikanji">壬</div><div class="iread">みずのえ</div><span class="ielem" style="background:var(--water)">水（陽）</span><div class="idesc">大きな河。自由でスケールの大きな発想を持つ。</div></div>
+      <div class="info-card"><div class="ikanji">癸</div><div class="iread">みずのと</div><span class="ielem" style="background:var(--water)">水（陰）</span><div class="idesc">大地を潤す雨露。直感力と洞察力に優れる。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="ref-section" id="branches">
+  <div class="wrap">
+    <p class="kicker">Earthly Branches</p>
+    <h2>十二支について</h2>
+    <p class="ref-lead">十二支は、年・月・日・時のそれぞれに巡る12種類の気で、なじみ深い動物にたとえられます。十干と組み合わさることで、より細やかな性質や運気の流れを表します。</p>
+    <div class="info-grid">
+      <div class="info-card"><div class="ikanji">子</div><div class="iread">ねずみ</div><span class="ielem" style="background:var(--water)">水</span></div>
+      <div class="info-card"><div class="ikanji">丑</div><div class="iread">うし</div><span class="ielem" style="background:var(--earth)">土</span></div>
+      <div class="info-card"><div class="ikanji">寅</div><div class="iread">とら</div><span class="ielem" style="background:var(--wood)">木</span></div>
+      <div class="info-card"><div class="ikanji">卯</div><div class="iread">う</div><span class="ielem" style="background:var(--wood)">木</span></div>
+      <div class="info-card"><div class="ikanji">辰</div><div class="iread">たつ</div><span class="ielem" style="background:var(--earth)">土</span></div>
+      <div class="info-card"><div class="ikanji">巳</div><div class="iread">へび</div><span class="ielem" style="background:var(--fire)">火</span></div>
+      <div class="info-card"><div class="ikanji">午</div><div class="iread">うま</div><span class="ielem" style="background:var(--fire)">火</span></div>
+      <div class="info-card"><div class="ikanji">未</div><div class="iread">ひつじ</div><span class="ielem" style="background:var(--earth)">土</span></div>
+      <div class="info-card"><div class="ikanji">申</div><div class="iread">さる</div><span class="ielem" style="background:var(--metal)">金</span></div>
+      <div class="info-card"><div class="ikanji">酉</div><div class="iread">とり</div><span class="ielem" style="background:var(--metal)">金</span></div>
+      <div class="info-card"><div class="ikanji">戌</div><div class="iread">いぬ</div><span class="ielem" style="background:var(--earth)">土</span></div>
+      <div class="info-card"><div class="ikanji">亥</div><div class="iread">いのしし</div><span class="ielem" style="background:var(--water)">水</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ref-section alt" id="gogyou">
+  <div class="wrap">
+    <p class="kicker">Five Elements</p>
+    <h2>五行思想について</h2>
+    <p class="ref-lead">五行思想は、あらゆるものを「木・火・土・金・水」の5つの気の性質に分類する、中国古来の自然哲学です。四柱推命では、命式に含まれる十干・十二支をこの五行に置き換え、そのバランスから性質や運勢を読み解きます。</p>
+    <div class="element-cycle">
+      <div class="element-block"><div class="eglyph" style="color:var(--wood)">木</div><div class="ename">もく</div><p>成長と発展の気。伸びやかな行動力と柔軟な適応力の源。</p></div>
+      <div class="element-block"><div class="eglyph" style="color:var(--fire)">火</div><div class="ename">か</div><p>情熱と表現の気。人を惹きつける明るさと直感的な発想力。</p></div>
+      <div class="element-block"><div class="eglyph" style="color:var(--earth)">土</div><div class="ename">ど</div><p>安定と包容の気。物事をじっくり育て、周囲を支える力。</p></div>
+      <div class="element-block"><div class="eglyph" style="color:var(--metal)">金</div><div class="ename">きん</div><p>決断と洗練の気。筋を通す意志の強さと美意識を育む。</p></div>
+      <div class="element-block"><div class="eglyph" style="color:var(--water)">水</div><div class="ename">すい</div><p>知恵と柔軟の気。物事の本質を見抜く洞察力と適応力。</p></div>
+    </div>
+    <p class="cycle-note">五行には「相生（そうせい）」と「相剋（そうこく）」という2つの巡りがあります。相生は、木は火を、火は土を、土は金を、金は水を、水は木を生み育てる関係。相剋は、木は土を、土は水を、水は火を、火は金を、金は木を抑える関係です。星導 SEIDOUの鑑定結果では、この考え方をもとにあなたの命式全体の五行バランスを算出しています。</p>
   </div>
 </section>
 
@@ -727,6 +869,43 @@
 
     <div class="again-wrap">
       <button class="btn-ghost" id="againBtn">もう一度占う</button>
+    </div>
+  </div>
+</section>
+
+<section class="ref-section" id="faq">
+  <div class="wrap">
+    <p class="kicker">FAQ</p>
+    <h2>よくある質問</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>四柱推命はどんな占いですか？</summary>
+        <p>生年月日と出生時刻から「年柱・月柱・日柱・時柱」の四本の柱を算出し、そこに表れる十干・十二支・五行の組み合わせから、生まれ持った性質や才能、時とともに移り変わる運気の傾向を読み解く東洋の命術です。中国古来の陰陽五行説を土台としており、東洋占術の中でも特に体系的で的中率が高いとされています。</p>
+      </details>
+      <details class="faq-item">
+        <summary>出生時刻がわからない場合はどうすればいいですか？</summary>
+        <p>「出生時刻がわからない」にチェックを入れていただければ、時柱を除いた年柱・月柱・日柱の三柱で鑑定します。日主（あなたの中心的な気質）は日柱から算出されるため、時刻が不明でも基本的な性質診断はそのままご覧いただけます。</p>
+      </details>
+      <details class="faq-item">
+        <summary>日主（にっしゅ）とは何ですか？</summary>
+        <p>日柱に表れる十干のことで、四柱推命においてあなた自身の中心的な気質や本質を映すとされる、最も重要な要素です。甲・乙・丙・丁・戊・己・庚・辛・壬・癸の10種類があり、それぞれ木・火・土・金・水いずれかの気を持ちます。</p>
+      </details>
+      <details class="faq-item">
+        <summary>五行のバランスは何を意味しますか？</summary>
+        <p>命式に含まれる十干・十二支を木・火・土・金・水の5つに分類し、それぞれの数を可視化したものです。特定の気が多い・少ないという偏りは、その人が得意とする資質や、意識的に補うとよい要素を示す目安として使われます。</p>
+      </details>
+      <details class="faq-item">
+        <summary>今日・明日の運勢はどのように算出していますか？</summary>
+        <p>その日の干支（日柱）と、あなたの日主との五行の関係性（比和・食傷・印綬・財・官殺の5パターン）をもとに、傾向とラッキーアイテムの目安をお伝えしています。日々の過ごし方のヒントとして、気軽にご活用ください。</p>
+      </details>
+      <details class="faq-item">
+        <summary>鑑定結果はどの程度信頼できますか？</summary>
+        <p>星導 SEIDOUの鑑定は、簡略化した計算ロジックに基づく娯楽・参考目的のものです。節気の境界や地方時の扱いなどを簡略化しているため、専門の鑑定士による詳細な鑑定とは結果が異なる場合があります。人生の重要な判断はご自身の意思を大切になさってください。</p>
+      </details>
+      <details class="faq-item">
+        <summary>利用料金はかかりますか？</summary>
+        <p>星導 SEIDOUは無料でご利用いただけます。生年月日・出生時刻の入力のみで、命式の算出から五行バランス、日々の運勢まで、どなたでもお気軽にお試しいただけます。</p>
+      </details>
     </div>
   </div>
 </section>
